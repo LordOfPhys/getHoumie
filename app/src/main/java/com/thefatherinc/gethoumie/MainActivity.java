@@ -34,23 +34,5 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-
-        JSONObject jsonObjectParams =new JSONObject();
-        try {
-            jsonObjectParams.put("password", "password123");
-            jsonObjectParams.put("name", "Test");
-            jsonObjectParams.put("birthday", "10.10.1995");
-            jsonObjectParams.put("gender", "1");
-            jsonObjectParams.put("usr_lang", "ru");
-            jsonObjectParams.put("dis_lang", "русский");
-            jsonObjectParams.put("dev_id", "3d652443de43e9c2");
-            jsonObjectParams.put("dev_mod", "SM-A320F");
-            jsonObjectParams.put("func", "create_acc");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        f.channel().writeAndFlush(Unpooled.copiedBuffer(jsonObjectParams.toString(), CharsetUtil.UTF_8);
     }
-
 }

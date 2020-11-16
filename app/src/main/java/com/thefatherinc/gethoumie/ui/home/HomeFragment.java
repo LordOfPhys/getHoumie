@@ -1,6 +1,7 @@
 package com.thefatherinc.gethoumie.ui.home;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.thefatherinc.gethoumie.DemoClient;
 import com.thefatherinc.gethoumie.R;
 
 public class HomeFragment extends Fragment {
@@ -30,6 +32,10 @@ public class HomeFragment extends Fragment {
                 textView.setText(s);
             }
         });
+
+        DemoClient demoClient = new DemoClient("authorization");
+        demoClient.init();
+
         return root;
     }
 }
