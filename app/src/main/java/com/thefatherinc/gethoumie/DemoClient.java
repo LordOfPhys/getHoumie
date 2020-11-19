@@ -6,6 +6,7 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.InetSocketAddress;
 import java.util.concurrent.RejectedExecutionException;
 
 import io.netty.bootstrap.Bootstrap;
@@ -38,58 +39,45 @@ public class DemoClient {
 
     public void init()
     {
-        //--
-        Runnable runnable = new Runnable() {
-            public void run() {
-                try {
-                    //Здесь происходит настройка портов и привязка к ним
-                    b = new Bootstrap(); // (1)
-                    b.group(workerGroup); // (2)
-                    b.channel(NioSocketChannel.class); // (3)
-                    b.option(ChannelOption.SO_KEEPALIVE, true); // (4)
-                    b.handler(new ChannelInitializer<SocketChannel>() {
-                        @Override
-                        public void initChannel(SocketChannel ch) throws Exception {
-                            //тут вызывается обработчик канала
-                            ch.pipeline().addLast(new DemoClientHandler(DemoClient.this));
-                        }
-                    });
-                    // Start the client.
-                    f = b.connect(host, port).sync(); // (5)
-                    // Wait until the connection is closed.
-                    f.channel().closeFuture().sync();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+        EventLoopGroup group = new NioEventLoopGroup();
+        try{
+            Bootstrap clientBootstrap = new Bootstrap();
+            DemoClientHandler demoClientHandler = new DemoClientHandler(DemoClient.this);
 
+            clientBootstrap.group(group);
+            clientBootstrap.channel(NioSocketChannel.class);
+            clientBootstrap.remoteAddress(new InetSocketAddress("193.124.47.83", 11111));
+            clientBootstrap.handler(new ChannelInitializer<SocketChannel>() {
+                protected void initChannel(SocketChannel socketChannel) throws Exception {
+                    //                 socketChannel.pipeline().addLast(new TimeDecoder());
+                    socketChannel.pipeline().addLast(demoClientHandler);
                 }
-                catch (RejectedExecutionException e) {
-                    e.printStackTrace();
-
-                }
-                finally {
-                    workerGroup.shutdownGracefully();
-                }
+            });
+            f = clientBootstrap.connect().sync();
+            if (method.equals("authorization")) {
+                test();
             }
-        };
-        Thread thread = new Thread(runnable);
-        thread.start();
-    }
+            f.channel().closeFuture().sync();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                group.shutdownGracefully().sync();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    };
 
     public void authoraized() {
-        JSONObject jsonObjectParams =new JSONObject();
-        try {
-            jsonObjectParams.put("password", "password123");
-            jsonObjectParams.put("name", "Test");
-            jsonObjectParams.put("birthday", "10.10.1995");
-            jsonObjectParams.put("gender", "1");
-            jsonObjectParams.put("usr_lang", "ru");
-            jsonObjectParams.put("dis_lang", "русский");
-            jsonObjectParams.put("dev_id", "3d652443de43e9c2");
-            jsonObjectParams.put("dev_mod", "SM-A320F");
-            jsonObjectParams.put("func", "create_acc");
-            f.channel().writeAndFlush(Unpooled.copiedBuffer(jsonObjectParams.toString(), CharsetUtil.UTF_8));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        String mData;
+        mData = "{\"admin_panel\":\"true\", \"admin_pass\":\"Ulf5Wm3BtE9NJLvZ?|A9\",\"func\":\"getCountSocket\"}";//in.nextLine();
+        f.channel().writeAndFlush(Unpooled.copiedBuffer(mData, CharsetUtil.UTF_8));
+    }
+
+    public void test() {
+        String mData;
+        mData = "{\"admin_panel\":\"true\",\"func\":\"test\"} ";//in.nextLine();
+        f.channel().writeAndFlush(Unpooled.copiedBuffer(mData, CharsetUtil.UTF_8));
     }
 }
