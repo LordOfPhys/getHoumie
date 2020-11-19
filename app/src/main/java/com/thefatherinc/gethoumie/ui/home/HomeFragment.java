@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.thefatherinc.gethoumie.DemoClient;
+import com.thefatherinc.gethoumie.MyApplication;
 import com.thefatherinc.gethoumie.R;
 
 public class HomeFragment extends Fragment {
@@ -32,9 +33,6 @@ public class HomeFragment extends Fragment {
                 textView.setText(s);
             }
         });
-
-        DemoClient demoClient = new DemoClient("authorization");
-        demoClient.init();
 
         return root;
     }

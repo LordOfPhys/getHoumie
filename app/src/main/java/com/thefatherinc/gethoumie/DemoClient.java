@@ -1,6 +1,8 @@
 package com.thefatherinc.gethoumie;
 
 import android.content.Context;
+import android.util.Log;
+
 import java.net.InetSocketAddress;
 
 import io.netty.bootstrap.Bootstrap;
@@ -24,10 +26,9 @@ public class DemoClient {
     public ChannelFuture f;
     String method;
 
-    public DemoClient(String method) {
-
+    public DemoClient(Context context) {
+        this.context = context;
         workerGroup = new NioEventLoopGroup();
-        this.method = method;
         //init();
     }
 
@@ -47,7 +48,6 @@ public class DemoClient {
                 }
             });
             f = clientBootstrap.connect().sync();
-            test();
             f.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             e.printStackTrace();
