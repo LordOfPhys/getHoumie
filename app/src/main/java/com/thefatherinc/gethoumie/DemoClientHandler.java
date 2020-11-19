@@ -2,12 +2,9 @@ package com.thefatherinc.gethoumie;
 
 import android.util.Log;
 
-import org.json.JSONObject;
-
-import java.nio.charset.Charset;
+import org.json.JSONException;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.CharsetUtil;
@@ -21,8 +18,18 @@ public class DemoClientHandler extends ChannelInboundHandlerAdapter {
     }
 
     @Override
-    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+    public void channelActive(ChannelHandlerContext channelHandlerContext) {
+    }
 
+    @Override
+    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+        String answer = "";
+        String jsonText = received; //Здесь лежит JSON
+        org.json.JSONObject parsedObject = new org.json.JSONObject(jsonText); //Здесь парсим.
+        Log.d("channelReadComplete" , received);
+        while (parsedObject.keys().hasNext()) {
+            answer += parsedObject.keys().next();
+        }
         //channelReadComplete - основной метод класса. Когджа ChannelInboundHandlerAdapter полностью
         //примет сообщение вызывается метод channelReadComplete. По сути, тут в ctx будет
         //отправляемый с сервера JSON.

@@ -1,24 +1,18 @@
 package com.thefatherinc.gethoumie;
 
 import android.content.Context;
-import android.util.Log;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.net.InetSocketAddress;
-import java.util.concurrent.RejectedExecutionException;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.CharsetUtil;
+
 
 public class DemoClient {
 
@@ -37,10 +31,9 @@ public class DemoClient {
         //init();
     }
 
-    public void init()
-    {
+    public void init() {
         EventLoopGroup group = new NioEventLoopGroup();
-        try{
+        try {
             Bootstrap clientBootstrap = new Bootstrap();
             DemoClientHandler demoClientHandler = new DemoClientHandler(DemoClient.this);
 
@@ -54,9 +47,7 @@ public class DemoClient {
                 }
             });
             f = clientBootstrap.connect().sync();
-            if (method.equals("authorization")) {
-                test();
-            }
+            test();
             f.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -67,9 +58,11 @@ public class DemoClient {
                 e.printStackTrace();
             }
         }
-    };
+    }
 
     public void authoraized() {
+        //Пункт 2. На сервер отправляется функция getCountSocket. На самом деле может быть отправлена любая функция
+        //первой (например при регистрации). на данный момент именно авторизация.
         String mData;
         mData = "{\"admin_panel\":\"true\", \"admin_pass\":\"Ulf5Wm3BtE9NJLvZ?|A9\",\"func\":\"getCountSocket\"}";//in.nextLine();
         f.channel().writeAndFlush(Unpooled.copiedBuffer(mData, CharsetUtil.UTF_8));
