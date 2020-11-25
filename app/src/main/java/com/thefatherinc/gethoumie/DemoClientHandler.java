@@ -18,13 +18,11 @@ public class DemoClientHandler extends ChannelInboundHandlerAdapter {
     public String received = "";
     DemoClient client;
     public DemoClientHandler(DemoClient client) {
-
         this.client=client;
     }
 
     @Override
     public void channelActive(ChannelHandlerContext channelHandlerContext) {
-        Log.d("test", "test");
     }
 
     @Override
@@ -42,7 +40,8 @@ public class DemoClientHandler extends ChannelInboundHandlerAdapter {
         for (int i = 0; i < keys.length; ++i) {
             answer += hashmap.get(keys[i]);
         }
-        Log.d("answer", answer);
+        Log.d("test", answer);
+        received = "";
         //channelReadComplete - основной метод класса. Когджа ChannelInboundHandlerAdapter полностью
         //примет сообщение вызывается метод channelReadComplete. По сути, тут в ctx будет
         //отправляемый с сервера JSON.
@@ -52,6 +51,6 @@ public class DemoClientHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         ByteBuf inBuffer = (ByteBuf) msg;
         received += inBuffer.toString(CharsetUtil.UTF_8);
-        Log.d("answer1", received);
+        Log.d("test", received);
     }
 }

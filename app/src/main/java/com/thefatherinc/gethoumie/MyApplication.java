@@ -10,6 +10,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         client = new DemoClient(getApplicationContext());
-        client.init();
+        Thread thread = new Thread(client);
+        thread.start();
     }
 }

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    android:gravity="center"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/reg_via_email_email"
+        android:hint="Email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </EditText>
+    <EditText
+        android:hint="password"
+        android:inputType="textPassword"
+        android:id="@+id/reg_via_email_pass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </EditText>
+    <EditText
+        android:hint="name"
+        android:id="@+id/reg_via_email_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </EditText>
+
+    <LinearLayout
+        android:weightSum="1"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <TextView
+            android:gravity="center"
+            android:text="01.01.1970"
+            android:id="@+id/reg_via_email_birth"
+            android:layout_weight="0.45"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </TextView>
+
+        <Button
+            android:layout_weight="0.55"
+            android:id="@+id/reg_via_email_btn_birth"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Выбрать дату"
+            android:onClick="setDate">
+        </Button>
+    </LinearLayout>
+
+    <Spinner
+        android:id="@+id/reg_via_email_gender"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </Spinner>
+
+    <Button
+        android:id="@+id/reg_via_email_btn_registration"
+        android:text="Зарегестрироваться"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </Button>
+
+</LinearLayout>

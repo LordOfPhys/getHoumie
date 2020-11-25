@@ -3,6 +3,9 @@ package com.thefatherinc.gethoumie;
 import android.content.Context;
 import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.net.InetSocketAddress;
 
 import io.netty.bootstrap.Bootstrap;
@@ -16,7 +19,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.CharsetUtil;
 
 
-public class DemoClient {
+public class DemoClient implements Runnable {
 
     public Bootstrap b;
     public Context context;
@@ -32,7 +35,7 @@ public class DemoClient {
         //init();
     }
 
-    public void init() {
+    public void run() {
         EventLoopGroup group = new NioEventLoopGroup();
         try {
             Bootstrap clientBootstrap = new Bootstrap();
@@ -60,12 +63,34 @@ public class DemoClient {
         }
     }
 
-    public void authoraized() {
+    public void sendMessage(String func, String[] message) throws JSONException {
+        if (func.equals("registration_use_email")) {
+            registration_use_email(message[0], message[1], message[2], message[3], message[4]);
+        } else {
+            String mData;
+            mData = "{\"admin_panel\":\"true\",\"func\":\"test\"} ";//in.nextLine();
+            f.channel().writeAndFlush(Unpooled.copiedBuffer(mData, CharsetUtil.UTF_8));
+        }
+    }
+
+    public void registration_use_email(String user_email, String user_pass, String user_name, String user_birthday, String user_gender) throws JSONException {
         //Пункт 2. На сервер отправляется функция getCountSocket. На самом деле может быть отправлена любая функция
         //первой (например при регистрации). на данный момент именно авторизация.
-        String mData;
-        mData = "{\"admin_panel\":\"true\", \"admin_pass\":\"Ulf5Wm3BtE9NJLvZ?|A9\",\"func\":\"getCountSocket\"}";//in.nextLine();
-        f.channel().writeAndFlush(Unpooled.copiedBuffer(mData, CharsetUtil.UTF_8));
+        JSONObject jsonObjectParams =new JSONObject();
+        jsonObjectParams.put("func", "createAccount");
+        jsonObjectParams.put("user_email", user_email);
+        jsonObjectParams.put("user_pass", user_pass);
+        jsonObjectParams.put("user_name", user_name);
+        jsonObjectParams.put("user_family", "ТестовФамилия@test.ru");
+        jsonObjectParams.put("user_patronymic", "ТестовичОтчество");
+        jsonObjectParams.put("user_birthday", user_birthday);
+        jsonObjectParams.put("user_gender", user_gender);
+        jsonObjectParams.put("device_id", "39df2bbfbec08eea");
+        jsonObjectParams.put("device_model", "SM-G955F");
+        jsonObjectParams.put("user_language", "ru");
+        jsonObjectParams.put("display_language", "русский");
+        jsonObjectParams.put("v", "1.0");
+        f.channel().writeAndFlush(Unpooled.copiedBuffer(jsonObjectParams.toString(), CharsetUtil.UTF_8));
     }
 
     public void test() {
